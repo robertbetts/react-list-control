@@ -2,9 +2,7 @@ import * as React from "react";
 import { Form, Table, Modal, Button } from  'react-bootstrap';
 import "react-datepicker/dist/react-datepicker.css";
 
-
 export type ListColType = "string"|"integer"|"float"|"boolean"|"surrogate"|"labelItem"|"textItem";
-
 
 export interface ListColProp {
   name: string,
@@ -27,6 +25,7 @@ export interface ListControlProps {
   updateRowItem: (updatedItem:any) => {}
 }
 
+
 export interface ListControlState {
   data: any,
   selectedRowItem: any,
@@ -35,6 +34,7 @@ export interface ListControlState {
 
 
 function RenderFormField(props:any) {
+
   const stringTypes = ['date', 'string', 'email', 'url', 'tel'];
   const numericTypes = ['float', 'integer'];
   const formRequired = props.colProp.formRequired === undefined ? true : props.colProp.formRequired;
@@ -102,7 +102,7 @@ class ListItemForm extends React.Component<any, any> {
     const colProp = this.props.colProps.find((item:any) => item.value===fieldName);
 
     if (colProp) {
-      console.log("onfieldChange", colProp.value, this.state.rowData[fieldName], "=>", fieldVal);
+      // console.log("onfieldChange", colProp.value, this.state.rowData[fieldName], "=>", fieldVal);
 
       if (colProp.type === "textItem") {
         if (fieldVal !== this.state.rowData[fieldName]) {
@@ -242,7 +242,6 @@ export default class ListControl extends React.Component<ListControlProps, ListC
   }
 
   handleFormModalClose() {
-    console.log("handleFormModalClose");
     this.setState({
       showFormModal: false,
       selectedRowItem: null,
@@ -279,7 +278,7 @@ export default class ListControl extends React.Component<ListControlProps, ListC
 
   updateRowItem(dirty:boolean, updatedItem:any) {
     if (dirty) {
-      console.log("dirty updated row item");
+      // console.log("dirty updated row item");
       this.setState({selectedRowItem: updatedItem});
     }
   }
