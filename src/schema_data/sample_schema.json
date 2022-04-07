@@ -1,0 +1,97 @@
+{
+    "SchemaOne" :
+    {
+        "schemaName": "SchemaOne",
+        "tables": {
+            "TableOne": {
+                "schemaName" : "SchemaOne",
+                "tableName" : "TableOne",
+                "primaryKeys" : [],
+                "columns" : [
+                    {
+                        "schemaName" : "SchemaOne",
+                        "tableName" : "TableOne",
+                        "name": "firstName",
+                        "displayName" : "First Name",
+                        "type" : "string",
+                        "primaryKey" : false,
+                        "defaultValue" : null,
+                        "decimals" : null,
+                        "foreignKey" : null,
+                        "editRequired" : true,
+                        "editReadOnly": null,
+                        "listDisplay": null,
+                        "formDisplay": null               
+                    },
+                    {
+                        "schemaName" : "SchemaOne",
+                        "tableName" : "TableOne",
+                        "name": "lastName",
+                        "displayName" : "Last Name",
+                        "type" : "string",
+                        "primaryKey" : false,
+                        "defaultValue" : null,
+                        "decimals" : null,
+                        "foreignKey" : null,
+                        "editRequired" : true,
+                        "editReadOnly": null,
+                        "listDisplay": null,
+                        "formDisplay": null               
+                    },
+                    {
+                        "schemaName" : "SchemaOne",
+                        "tableName" : "TableOne",
+                        "name": "dob",
+                        "displayName" : "Date of Birth",
+                        "type" : "date",
+                        "primaryKey" : false,
+                        "defaultValue" : null,
+                        "decimals" : null,
+                        "foreignKey" : null,
+                        "editRequired" : true,
+                        "editReadOnly": null,
+                        "listDisplay": null,
+                        "formDisplay": null               
+                    },
+                    {
+                        "schemaName" : "SchemaOne",
+                        "tableName" : "TableOne",
+                        "name": "clientID",
+                        "displayName" : "ClientID",
+                        "type" : "string",
+                        "primaryKey" : true,
+                        "defaultValue" : null,
+                        "decimals" : null,
+                        "foreignKey" : null,
+                        "editRequired" : true,
+                        "editReadOnly": null,
+                        "listDisplay": null,
+                        "formDisplay": null               
+                    }
+                ]
+
+            },
+            "TableTwo" : {
+                "schemaName" : "SchemaOne",
+                "tableName" : "TableTwo",
+                "primaryKeys" : [],
+                "columns" : []                
+            }
+        }
+    },
+    "SchemaTwo" : {
+        "schemaName": "SchemaTwo",
+        "tables": {
+            "TableOne": {
+                "schemaName" : "SchemaTwo",
+                "tableName" : "TableOne",
+                "primaryKeys" : [],
+                "columns" : []
+            }
+        }
+    },
+    "SchemaThree" : {
+        "schemaName": "e",
+        "tables": {}
+    }
+}

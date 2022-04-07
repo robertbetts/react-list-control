@@ -1,12 +1,11 @@
 import * as React from "react";
 import { Form, Table, Modal, Button } from  'react-bootstrap';
-import "react-datepicker/dist/react-datepicker.css";
 
 export type ListColType = "string"|"integer"|"float"|"boolean"|"surrogate"|"labelItem"|"textItem";
 
 export interface ListColProp {
   name: string,
-  value: string | React.ReactChild | React.ReactChildren,
+  value: string,
   type: ListColType,
   decimals?: number,
   listHide?: boolean,
@@ -18,13 +17,12 @@ export interface ListColProp {
 export interface ListControlProps {
   title?: string,
   showIndex?: boolean,
-  data: [],
+  data: any[],
   colProps : ListColProp[],
+  updateRowItem?: (updatedItem:any) => {}
   onRowClick?: (event:any, rowData:any, colProps:any) => {},
   onCellClick?: (event:any, colProp:any, rowData:any, colProps:any) => {},
-  updateRowItem: (updatedItem:any) => {}
 }
-
 
 export interface ListControlState {
   data: any,
@@ -32,25 +30,39 @@ export interface ListControlState {
   showFormModal: boolean,
 }
 
-
 function RenderFormField(props:any) {
 
   const stringTypes = ['date', 'string', 'email', 'url', 'tel'];
   const numericTypes = ['float', 'integer'];
-  const formRequired = props.colProp.formRequired === undefined ? true : props.colProp.formRequired;
-  const formRO = props.colProp.formRO === undefined ? false : props.colProp.formRequired;
 
-  const controlProps = {
+  const colProp = props.colProp;
+  const formRequired = colProp.formRequired === undefined ? true : colProp.formRequired;
+  const formRO = colProp.formRO === undefined ? false : colProp.formRequired;
+
+  const controlId = "ValidationDefault" + props.fieldIndex
+
+  const regularClass = props.regularClass === undefined ? "col-6" : props.regularClass;
+  const wideClass = props.wideClass === undefined ? "col-12" : props.wideClass;
+  let className = regularClass
+  if (colProp.type === "text") {
+    className = wideClass
+  }
+
+  let controlProps = {
     required :formRequired,
     onChange: props.onChange,
-    name: props.colProp.value, 
+    name: colProp.value, 
     readOnly: formRO,
   }
+
   return (
-    <Form.Group className="col-6">
+    <Form.Group className={className} controlId={controlId}>
       <Form.Label>{props.colProp.name}</Form.Label>
       { stringTypes.indexOf(props.colProp.type) > -1 && 
         <Form.Control { ...controlProps } type={props.colProp.type} value={props.rowData[props.colProp.value]} placeholder="" />
+      }
+      { props.colProp.type === "text" && 
+        <Form.Control { ...controlProps } as="textarea" rows={3} value={props.rowData[props.colProp.value]} placeholder="" />
       }
       { numericTypes.indexOf(props.colProp.type) > -1 && 
         <Form.Control { ...controlProps } type={props.colProp.type} value={props.rowData[props.colProp.value]} placeholder="" />
@@ -77,24 +89,43 @@ function RenderFormField(props:any) {
           )}
         </Form.Select>
       }
-
     </Form.Group>
   )
 }
 
 class ListItemForm extends React.Component<any, any> {
+
+  // This class proptery serves a reference pointer to the Form component 
+  // in order to access its validation features
+  formRef = React.createRef<HTMLFormElement>();
+
   constructor(props:any) {
     super(props)
 
     this.onfieldChange = this.onfieldChange.bind(this); 
+    this.submitForm = this.submitForm.bind(this); 
+    this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
       dirty: false,
+      validated: false,
       rowData: props.rowData,
     }
   }
 
+  // componentDidMount() {
+  //   const validated = this.formRef.current.checkValidity();
+  //   this.setState({
+  //     validated: validated,
+  //   });    
+  // }
+
   onfieldChange(event:any) {
+    /* Catpure the datachange and transform it to the appropriate underlying structure.
+
+        NOTE: No rounding is applied to floats here. colProps.decimals is used
+              for display purposes only.
+    */
     const fieldName = event.target.name;
     let fieldVal = event.target.value;
     let dirty = false;
@@ -103,36 +134,63 @@ class ListItemForm extends React.Component<any, any> {
 
     if (colProp) {
       // console.log("onfieldChange", colProp.value, this.state.rowData[fieldName], "=>", fieldVal);
-
       if (colProp.type === "textItem") {
         if (fieldVal !== this.state.rowData[fieldName]) {
           dirty = true;
         }
         fieldVal = {value:fieldVal, text:event.nativeEvent.target[event.target.selectedIndex].text}
+
       } else if (colProp.type === "surrogate" || colProp.type === "labelItem") {
         if (fieldVal !== this.state.rowData[fieldName]) {
           dirty = true;
         }
         fieldVal = {value:fieldVal, label:event.nativeEvent.target[event.target.selectedIndex].text}
+
       } else if (fieldVal !== this.state.rowData[fieldName]) {
         dirty = true;
       }
+
+      const validated = this.formRef.current.checkValidity();
+      // console.log("validated", validated)
+
       this.setState({
+        validated: validated,
         dirty: dirty,  
         rowData: {...this.state.rowData, [fieldName]: fieldVal}
       });
-      this.props.updateRowItem(dirty, {...this.state.rowData, [fieldName]: fieldVal})
+    }
+  }
+
+  submitForm(event:any) {
+    this.formRef.current.submit()
+    // console.log("submitForm", this.state.validated)
+  }
+
+  handleSubmit(event:any) {
+    const validated = this.formRef.current.checkValidity();
+    if (validated === false) {
+      event.preventDefault();
+      event.stopPropagation();
+
+    } 
+    this.setState({
+      validated: true,
+    });
+    // Only update state in parent when validation passes
+    if (validated) {
+      this.props.onValidSubmit(this.state.dirty, {...this.state.rowData})
     }
   }
 
   render() {
     return (
-      <Form>
+      <Form ref={this.formRef} noValidate validated={this.state.validated} onSubmit={this.handleSubmit}>
         <div className="row">
           { this.props.colProps.map( (colProp:any, index:number) => {
             return (
               <RenderFormField
                 key={index}
+                fieldIndex={index}
                 colProp={colProp}
                 rowData={this.state.rowData}
                 onChange={this.onfieldChange}
@@ -140,6 +198,14 @@ class ListItemForm extends React.Component<any, any> {
             )
             })
           }
+        </div>
+        <div className="modal-footer">
+          <Button variant="secondary" onClick={this.props.handleFormClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={this.handleSubmit}>
+            Save Changes
+          </Button>
         </div>
       </Form>
     )
@@ -150,6 +216,7 @@ function RenderDataItem(props:any) {
 
   const dataValue = props.rowData[props.colProp.value];
   let displayValue: any;
+
   if (props.colProp.type === "float") {
     displayValue = parseFloat(dataValue).toFixed(props.colProp.decimals)
 
@@ -166,7 +233,16 @@ function RenderDataItem(props:any) {
     displayValue = dataValue
   }
   // console.log(props.colProp.type, displayValue, props.colProp );
-  return <>{"" + displayValue}</>
+
+  if (props.colProp.type === "text") {
+    return (
+      <span className="d-inline-block text-truncate" style={{maxWidth: "250px"}}>
+        {displayValue}
+      </span>
+      )
+  } else {
+    return <>{"" + displayValue}</>
+  }
 }
 
 function ListHeader(props:any) {
@@ -189,6 +265,7 @@ function ListHeader(props:any) {
 }
 
 function ListData(props: any) {
+  
   return (
     <tbody>
       { props.data.map( (rowData:any, rowIndex:number) => {
@@ -223,7 +300,6 @@ export default class ListControl extends React.Component<ListControlProps, ListC
     this.onRowClick = this.onRowClick.bind(this); 
     this.handleFormModalClose = this.handleFormModalClose.bind(this); 
     this.handleFormModalSave = this.handleFormModalSave.bind(this); 
-    this.updateRowItem = this.updateRowItem.bind(this); 
 
     this.state = {
       data: this.parseData(props.data).map((item:any, index:any) => {return { row_id:index, ...item }}),
@@ -249,16 +325,17 @@ export default class ListControl extends React.Component<ListControlProps, ListC
   }
 
 
-  handleFormModalSave() {
-    const selectedRowItem = this.state.selectedRowItem;
-    const newData = this.state.data.map((item:any) => {
-      if (item.row_id === selectedRowItem.row_id) {
-        return selectedRowItem
-      } else {
-        return item
-      }
-    })
-    this.setState({data:newData});
+  handleFormModalSave(dirty:boolean, updatedItem:any) {
+    if (dirty) {
+      const newData = this.state.data.map((item:any) => {
+        if (item.row_id === updatedItem.row_id) {
+          return updatedItem
+        } else {
+          return item
+        }
+      })
+      this.setState({data:newData});
+    }
     this.setState({
       showFormModal: false,
       selectedRowItem: null,
@@ -276,15 +353,10 @@ export default class ListControl extends React.Component<ListControlProps, ListC
     }
   }
 
-  updateRowItem(dirty:boolean, updatedItem:any) {
-    if (dirty) {
-      // console.log("dirty updated row item");
-      this.setState({selectedRowItem: updatedItem});
-    }
-  }
+
 
   render() {
-
+    const listItemFromRef = React.createRef<ListItemForm>();
     return (
       <div className="row" style={{margin:"0px"}}>
         { this.props.title &&
@@ -300,25 +372,19 @@ export default class ListControl extends React.Component<ListControlProps, ListC
             onRowClick={this.onRowClick}
             />
         </Table>
-          <Modal show={this.state.showFormModal} size="lg">
+        <Modal show={this.state.showFormModal} size="lg">
           <Modal.Header>
             <Modal.Title>Row Edit</Modal.Title>
           </Modal.Header>
           <Modal.Body>
               <ListItemForm
+                ref={listItemFromRef}
                 rowData={this.state.selectedRowItem}
                 colProps={this.props.colProps}
-                updateRowItem={this.updateRowItem}
+                onValidSubmit={this.handleFormModalSave}
+                handleFormClose={this.handleFormModalClose}
               />
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleFormModalClose}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={this.handleFormModalSave}>
-              Save Changes
-            </Button>
-          </Modal.Footer>
         </Modal>
       </div>
     )
