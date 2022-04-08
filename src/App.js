@@ -11,27 +11,27 @@ function App() {
 
   const colProps = [
     {
-      name: 'First Name',
-      value: 'firstName',
+      displayName: 'First Name',
+      name: 'firstName',
       type: 'string',
       required: true,
     },
     {
-      name: 'Last Name',
-      value: 'lastName',
+      displayName: 'Last Name',
+      name: 'lastName',
       type: 'string',
       required: true,
     },
     {
-      name: 'Date of Birth',
-      value: 'dob',
+      //displayName: 'Date of Birth',
+      name: 'dob',
       type: 'date',
       required: true,
     },
 
     {
-      name: 'Client Type',
-      value: 'clientType',
+      displayName: 'Client Type',
+      name: 'clientType',
       type: 'labelItem',
       required: true,
       lookup: () => {return [{value: "individual", label: "Individual"},
@@ -39,43 +39,44 @@ function App() {
                             ]},
     },
     {
-      name: "Language",
-      value: "language",
+      displayName: "Language",
+      name: "language",
       type: "surrogate",
       required: true,
       lookup: () => {return languages.map((item)=>{return {value:item.code, label:item.name}})}
     },
     {
-      name: "Country",
-      value: "country",
+      displayName: "Country",
+      name: "country",
       type: "textItem",
       required: true,
       lookup: () => {return countries.map((item)=>{return {value:item.code, text:item.name}})}
     },
     {
-      name: 'Client ID',
-      value: 'clientID',
+      displayName: 'Client ID',
+      name: 'clientID',
       type: 'string',
+      primaryKey: true,
     },
     {
-      name: 'Rating',
-      value: 'rating',
+      displayName: 'Rating',
+      name: 'rating',
       type: 'float',
       decimals: 2,
     },
     {
-      name: 'Approved',
-      value: 'approved',
+      displayName: 'Approved',
+      name: 'approved',
       type: 'boolean',
     },
-    { name: "Notes",
-      value: "notes",
+    { displayName: "Notes",
+      name: "notes",
       type: "text",
     }
   ]
 
 
-  const data = [
+  const sample_client_data = [
     {
       clientID : "123456",
       firstName: "Robert",
@@ -105,14 +106,25 @@ function App() {
   const listControl = <ListControl 
     title='Test List Control'
     colProps={colProps}
-    data={data}
+    data={sample_client_data}
     />
   console.log(listControl);
 
 
-  const fetchTableData = (schemaName, tableName, offse0, limit=20) => {
-    return [data.length, data]
+  const fetchTableData = (schemaName, tableName, offset=0, limit=20) => {
+    console.log("fetchTableData", schemaName, tableName, offset, limit);
+    let data = []
+    if (schemaName === "ClientDB" && tableName === "client") {
+        data = sample_client_data
+    }
+    return {
+      count: data.length,
+      data: data,
+    }
   }
+
+  const testSchema = schemaDataSample
+  testSchema["ClientDB"].tables["client"].columns = colProps
 
   const schemaViewControl = <SchemaViewControl
     schemaDictionary = {schemaDataSample}

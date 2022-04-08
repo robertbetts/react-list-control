@@ -1,97 +1,36 @@
 {
-    "SchemaOne" :
+    "ClientDB" :
     {
-        "schemaName": "SchemaOne",
+        "schemaName": "ClientDB",
         "tables": {
-            "TableOne": {
-                "schemaName" : "SchemaOne",
-                "tableName" : "TableOne",
+            "client": {
+                "schemaName" : "ClientDB",
+                "tableName" : "client",
                 "primaryKeys" : [],
-                "columns" : [
-                    {
-                        "schemaName" : "SchemaOne",
-                        "tableName" : "TableOne",
-                        "name": "firstName",
-                        "displayName" : "First Name",
-                        "type" : "string",
-                        "primaryKey" : false,
-                        "defaultValue" : null,
-                        "decimals" : null,
-                        "foreignKey" : null,
-                        "editRequired" : true,
-                        "editReadOnly": null,
-                        "listDisplay": null,
-                        "formDisplay": null               
-                    },
-                    {
-                        "schemaName" : "SchemaOne",
-                        "tableName" : "TableOne",
-                        "name": "lastName",
-                        "displayName" : "Last Name",
-                        "type" : "string",
-                        "primaryKey" : false,
-                        "defaultValue" : null,
-                        "decimals" : null,
-                        "foreignKey" : null,
-                        "editRequired" : true,
-                        "editReadOnly": null,
-                        "listDisplay": null,
-                        "formDisplay": null               
-                    },
-                    {
-                        "schemaName" : "SchemaOne",
-                        "tableName" : "TableOne",
-                        "name": "dob",
-                        "displayName" : "Date of Birth",
-                        "type" : "date",
-                        "primaryKey" : false,
-                        "defaultValue" : null,
-                        "decimals" : null,
-                        "foreignKey" : null,
-                        "editRequired" : true,
-                        "editReadOnly": null,
-                        "listDisplay": null,
-                        "formDisplay": null               
-                    },
-                    {
-                        "schemaName" : "SchemaOne",
-                        "tableName" : "TableOne",
-                        "name": "clientID",
-                        "displayName" : "ClientID",
-                        "type" : "string",
-                        "primaryKey" : true,
-                        "defaultValue" : null,
-                        "decimals" : null,
-                        "foreignKey" : null,
-                        "editRequired" : true,
-                        "editReadOnly": null,
-                        "listDisplay": null,
-                        "formDisplay": null               
-                    }
-                ]
+                "columns" : []
 
             },
-            "TableTwo" : {
-                "schemaName" : "SchemaOne",
-                "tableName" : "TableTwo",
+            "booking_center" : {
+                "schemaName" : "ClientDB",
+                "tableName" : "booking_center",
                 "primaryKeys" : [],
                 "columns" : []                
             }
         }
     },
-    "SchemaTwo" : {
-        "schemaName": "SchemaTwo",
+    "SalesDB" : {
+        "schemaName": "SalesDB",
         "tables": {
-            "TableOne": {
-                "schemaName" : "SchemaTwo",
-                "tableName" : "TableOne",
+            "Invoice": {
+                "schemaName" : "SalesDB",
+                "tableName" : "Invoice",
                 "primaryKeys" : [],
                 "columns" : []
             }
         }
     },
-    "SchemaThree" : {
-        "schemaName": "e",
+    "ProductDB" : {
+        "schemaName": "ProductDB",
         "tables": {}
     }
 }
