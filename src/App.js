@@ -1,9 +1,22 @@
+import * as React from "react";
 import './App.css';
 
 // import ListControl from "./components/ListControl";
 import SchemaViewControl from "./components/SchemaViewControl";
 
 import { clientDataRows, sampleSchema } from "./reference/FakeSampleData.ts"
+
+export const fetchTableData = (schemaName, tableName, offset=0, limit=20) => {
+  // console.log("fetchTableData", schemaName, tableName, offset, limit);
+  let data = []
+  if (schemaName === "ClientDB" && tableName === "client") {
+      data = clientDataRows();
+  }
+  return {
+    count: data.length,
+    data: data,
+  }
+}
 
 function App() {
 
@@ -18,19 +31,6 @@ function App() {
   //   </div>
   // );
 
-
-  const fetchTableData = (schemaName, tableName, offset=0, limit=20) => {
-    // console.log("fetchTableData", schemaName, tableName, offset, limit);
-    let data = []
-    if (schemaName === "ClientDB" && tableName === "client") {
-        data = clientDataRows();
-        // console.log(data);
-    }
-    return {
-      count: data.length,
-      data: data,
-    }
-  }
 
   return (
     <div className="App">

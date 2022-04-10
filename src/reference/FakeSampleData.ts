@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { v4 as uuid } from 'uuid';
-import {languages, countries} from "./CommonDataLookups";
+import { languages, countries } from "./CommonDataLookups";
 
 export const clientDataRows = (numOfRows=20) => {
 
@@ -18,7 +18,7 @@ export const clientDataRows = (numOfRows=20) => {
         return surrogate
     }
 
-    for (let i=0; i <= numOfRows; i++) {
+    for (let i=0; i < numOfRows; i++) {
         const country = fakeCountry();
         clientDataset.push({
             clientID : uuid(),
@@ -38,7 +38,7 @@ export const clientDataRows = (numOfRows=20) => {
 } 
 
 
-const colProps = [
+export const colProps = [
     {
       displayName: 'First Name',
       name: 'firstName',
@@ -109,7 +109,7 @@ export const sampleSchema = () => {
 
     const schema:{[key: string]: any} = {};
 
-    for (let z=0; z <= 3; z++) {    
+    for (let z=0; z < 3; z++) {    
 
         let schemaName = "fakeSchema" + z
 
@@ -119,7 +119,7 @@ export const sampleSchema = () => {
         }
 
         const numOfTables = faker.datatype.number({ min: 1, max: 2, precision: 1 });
-        for (let i=0; i <= numOfTables; i++) {    
+        for (let i=0; i < numOfTables; i++) {    
 
             let tableName = "fakeTable" + i 
             const tableProp = {
@@ -128,7 +128,7 @@ export const sampleSchema = () => {
                 columns: [] as any[],
             }
             const numOfCols = faker.datatype.number({ min: 2, max: 10, precision: 1 });
-            for (let j=0; j <= numOfCols; j++) {
+            for (let j=0; j < numOfCols; j++) {
                 const colName = faker.database.column();
                 tableProp.columns.push({
                     displayName: colName,
