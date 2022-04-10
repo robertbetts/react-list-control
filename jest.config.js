@@ -6,5 +6,4 @@ module.exports = {
     '^.+\\.(ts|tsx)?$': 'ts-jest',
     "^.+\\.(js|jsx)$": "babel-jest",
   }
-  //testMatch: ['**/__tests__/*.js?(x)', '**/__tests__/*.ts?(x)'],
 };

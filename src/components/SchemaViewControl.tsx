@@ -157,7 +157,7 @@ function deepEqual(object1:any, object2:any) {
 }
 
 /**
- * Extending ListControl to use Redux to refresh its internal state
+ * Extending ListControl to refresh its internal state
  * when a new schmea table is selected.
  */
 class DataListControl extends ListControl {
@@ -173,7 +173,7 @@ class DataListControl extends ListControl {
 }
 
 /**
- * Extending ListControl to use Redux to refresh its internal state
+ * Extending ListControl to refresh its internal state
  * when a new schmea table is selected.
  */
 class PropertiesListControl extends ListControl {

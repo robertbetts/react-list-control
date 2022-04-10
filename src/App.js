@@ -1,6 +1,6 @@
 import './App.css';
 
-import ListControl from "./components/ListControl";
+// import ListControl from "./components/ListControl";
 import {languages, countries} from "./reference/CommonDataLookups";
 
 import SchemaViewControl from "./components/SchemaViewControl";
@@ -103,16 +103,20 @@ function App() {
     }    
   ]
 
-  const listControl = <ListControl 
-    title='Test List Control'
-    colProps={colProps}
-    data={sample_client_data}
-    />
-  console.log(listControl);
+  // const listControl = <ListControl 
+  //   title='Test List Control'
+  //   colProps={colProps}
+  //   data={sample_client_data}
+  //   />
+  // console.log(listControl);
+  // return (
+  //    {listControl}
+  //   </div>
+  // );
 
 
   const fetchTableData = (schemaName, tableName, offset=0, limit=20) => {
-    console.log("fetchTableData", schemaName, tableName, offset, limit);
+    // console.log("fetchTableData", schemaName, tableName, offset, limit);
     let data = []
     if (schemaName === "ClientDB" && tableName === "client") {
         data = sample_client_data
@@ -122,20 +126,14 @@ function App() {
       data: data,
     }
   }
-
   const testSchema = schemaDataSample
   testSchema["ClientDB"].tables["client"].columns = colProps
-
-  const schemaViewControl = <SchemaViewControl
-    schemaDictionary = {schemaDataSample}
-    fetchDataFunction={fetchTableData}
-    />
-  console.log(schemaViewControl);
-
   return (
     <div className="App">
-      {/* {listControl} */}
-      {schemaViewControl}
+      <SchemaViewControl
+        schemaDictionary = {schemaDataSample}
+        fetchDataFunction={fetchTableData}
+      />
     </div>
   );
 }
