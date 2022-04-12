@@ -4,6 +4,8 @@ This is a React Bootstrap app themed on a data model driven schema and data view
 
 The rendering of the list and of the form is driven by a schema definition and data set provided.
 
+Demo:   https://robertbetts.github.io/react-list-control
+
 
 ## Available Scripts
 
